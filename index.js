@@ -3,6 +3,28 @@ import express from "express";
 import dotenv from 'dotenv';
 import mongoose from "mongoose";
 import userRoutes from "./routes/userRoutes.js";
+import jwt from 'jsonwebtoken';
+
+//Authenticating
+export function authenticateToken(req,res,next){
+    const authHeaders = req.headers['autherization'];
+    const token = authHeaders && authHeaders.split(' ')[1];
+
+    if(!token){
+        return res.status(401).json({
+            message: "Token is required"
+        })
+    }
+    jwt.verify(token, process.env.JWT_KEY, (err, user) => {
+        if(err){
+            return res.status(403).json({
+                message: "Invalid or expired Token"
+            })
+        }
+        req.body.user = user;
+        next();
+    })
+}
 
 //configure dotenv
 dotenv.config();

@@ -50,3 +50,24 @@ export function getNotes(req,res){
         })
     })
 }
+
+//get notes by email
+export function getNotesByEmail(req,res){
+    const email = req.params.email
+    Notes.find({email: email}).then((result) => {
+        if(result == null){
+            res.status(404).json({
+                message: "Notes not found"
+            })
+        } else{
+            res.status(200).json({
+                message: "Notes Found",
+                notes: result
+            })
+        }
+    }).catch((err) => {
+        res.status(500).json({
+            error: err.message
+        })
+    })
+}

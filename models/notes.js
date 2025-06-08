@@ -13,6 +13,10 @@ const notesSchema = mongoose.Schema({
     description: {
         type: String,
         default: ""
+    },
+    email: {
+        type: String,
+        required: true
     }
 })
 

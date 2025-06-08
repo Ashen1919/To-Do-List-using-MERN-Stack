@@ -4,6 +4,7 @@ import Notes from "../models/notes.js"
 //create new note
 export function createNote(req,res){
     const {title, description } = req.body
+    const email = req.user.email
 
     //auto-generated ID
     const startingID = 1001
@@ -12,7 +13,8 @@ export function createNote(req,res){
         const newNote = new Notes({
             noteID : newID,
             title,
-            description
+            description,
+            email
         })
         newNote.save().then((result) => {
             res.status(200).json({
@@ -32,4 +34,19 @@ export function createNote(req,res){
         })
     })
 
+}
+
+//get all notes
+export function getNotes(req,res){
+    Notes.find().then((result) => {
+        res.status(200).json({
+            message: "Notes Found",
+            notes: result
+        })
+    }).catch((err) => {
+        res.status(500).json({
+            message: "Fail to found notes",
+            error: err
+        })
+    })
 }

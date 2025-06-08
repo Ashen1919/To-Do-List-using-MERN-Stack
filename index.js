@@ -22,7 +22,7 @@ export function authenticateToken(req,res,next){
                 message: "Invalid or expired Token"
             })
         }
-        req.body.user = user;
+        req.user = user;
         next();
     })
 }

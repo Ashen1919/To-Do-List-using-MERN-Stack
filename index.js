@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import express from "express";
 import dotenv from 'dotenv';
 import mongoose from "mongoose";
+import userRoutes from "./routes/userRoutes.js";
 
 //configure dotenv
 dotenv.config();
@@ -13,6 +14,9 @@ app.use(bodyParser.json());
 app.get('/', (req,res) => {
     res.send('Successfully send message')
 })
+
+//Routes configuration
+app.use("/api/users", userRoutes)
 
 //database connection
 const mongourl = process.env.MONGO_URL;

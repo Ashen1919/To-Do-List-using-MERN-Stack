@@ -1,5 +1,5 @@
-import brcypt from 'brcypt';
-import User from '../models/user';
+import brcypt from "bcrypt";
+import User from '../models/user.js';
 
 //Create an user
 export function signupUser(req,res){

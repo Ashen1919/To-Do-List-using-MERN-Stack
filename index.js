@@ -4,10 +4,11 @@ import dotenv from 'dotenv';
 import mongoose from "mongoose";
 import userRoutes from "./routes/userRoutes.js";
 import jwt from 'jsonwebtoken';
+import noteRouter from "./routes/noteRoutes.js";
 
 //Authenticating
 export function authenticateToken(req,res,next){
-    const authHeaders = req.headers['autherization'];
+    const authHeaders = req.headers['authorization'];
     const token = authHeaders && authHeaders.split(' ')[1];
 
     if(!token){
@@ -39,6 +40,7 @@ app.get('/', (req,res) => {
 
 //Routes configuration
 app.use("/api/users", userRoutes)
+app.use("/api/notes", noteRouter)
 
 //database connection
 const mongourl = process.env.MONGO_URL;

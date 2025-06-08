@@ -1,0 +1,35 @@
+import Notes from "../models/notes.js"
+
+
+//create new note
+export function createNote(req,res){
+    const {title, description } = req.body
+
+    //auto-generated ID
+    const startingID = 1001
+    Notes.countDocuments({}).then((count) => {
+        const newID = startingID + count + 1;
+        const newNote = new Notes({
+            noteID : newID,
+            title,
+            description
+        })
+        newNote.save().then((result) => {
+            res.status(200).json({
+                message: "New Note Created successful",
+                note: result
+            })
+        }).catch((err) => {
+            res.status(500),json({
+                message: "Fail to create note",
+                error: err
+            })
+        })
+    }).catch((error) => {
+        res.status(500).json({
+            message: "Something went wrong",
+            error: error
+        })
+    })
+
+}

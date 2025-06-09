@@ -17,6 +17,11 @@ const notesSchema = mongoose.Schema({
     email: {
         type: String,
         required: true
+    },
+    completed: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 })
 

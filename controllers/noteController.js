@@ -71,3 +71,20 @@ export function getNotesByEmail(req,res){
         })
     })
 }
+
+//Update notes
+export function updateNotes(req,res){
+    const noteID = req.params.noteID
+    const updateInfo = req.body
+
+    Notes.updateOne({noteID : noteID}, {$set: updateInfo}).then((result) => {
+        res.status(200).json({
+            message: "Note Update Successfully",
+            notes: result
+        })
+    }).catch((err) => {
+        res.status(500).json({
+            error: err.message
+        })
+    })
+}

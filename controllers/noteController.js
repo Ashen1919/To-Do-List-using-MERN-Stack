@@ -88,3 +88,17 @@ export function updateNotes(req,res){
         })
     })
 }
+
+//delete note
+export function deleteNotes(req,res){
+    const noteID = req.params.noteID
+    Notes.deleteOne({noteID : noteID}).then(() => {
+        res.status(200).json({
+            message: "Note deleted successfully"
+        })
+    }).catch((err) => {
+        res.status(500).json({
+            error: err.message
+        })
+    })
+}

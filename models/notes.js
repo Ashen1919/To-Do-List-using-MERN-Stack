@@ -22,6 +22,14 @@ const notesSchema = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    dateString: {
+        type: String,
+        required: true
+    },
+    timeString: {
+        type: String,
+        required: true
     }
 })
 

@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import userRoutes from "./routes/userRoutes.js";
 import jwt from 'jsonwebtoken';
 import noteRouter from "./routes/noteRoutes.js";
+import cors from "cors";
 
 //Authenticating
 export function authenticateToken(req,res,next){
@@ -26,6 +27,9 @@ export function authenticateToken(req,res,next){
         next();
     })
 }
+
+//config cors
+app.use(cors());
 
 //configure dotenv
 dotenv.config();

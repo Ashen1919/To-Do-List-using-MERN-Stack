@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import userRoutes from "./routes/userRoutes.js";
 import jwt from 'jsonwebtoken';
 import noteRouter from "./routes/noteRoutes.js";
+import cors from "cors";
 
 //Authenticating
 export function authenticateToken(req,res,next){
@@ -32,6 +33,9 @@ dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
+
+//config cors
+app.use(cors());
 
 //Get Request
 app.get('/', (req,res) => {

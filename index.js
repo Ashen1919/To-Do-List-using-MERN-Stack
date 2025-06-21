@@ -28,14 +28,14 @@ export function authenticateToken(req,res,next){
     })
 }
 
-//config cors
-app.use(cors());
-
 //configure dotenv
 dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
+
+//config cors
+app.use(cors());
 
 //Get Request
 app.get('/', (req,res) => {

@@ -77,6 +77,28 @@ export function getNotesByEmail(req,res){
     })
 }
 
+//get notes by noteID
+export function getNotesByNoteID(req,res){
+    const noteID = req.params.noteID
+
+    Notes.findOne({noteID: noteID}).then((result) => {
+        if(!result){
+            res.status(404).json({
+                message: "Notes not found"
+            })
+        } else{
+            res.status(200).json({
+                message: "Notes Found",
+                notes: result
+            })
+        }
+    }).catch((err) => {
+        res.status(500).json({
+            error: err.message
+        })
+    })
+}
+
 //Update notes
 export function updateNotes(req,res){
     const noteID = req.params.noteID

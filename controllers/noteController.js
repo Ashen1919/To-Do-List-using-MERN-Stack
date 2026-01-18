@@ -1,131 +1,151 @@
 import Notes from "../models/notes.js"
 
+// Create new note
+export async function createNote(req, res) {
+    try {
+        const { title, description } = req.body;
+        const email = req.user.email;
+        const date = new Date();
+        const dateString = date.toLocaleDateString();
+        const timeString = date.toLocaleTimeString();
 
-//create new note
-export function createNote(req,res){
-    const {title, description } = req.body
-    const email = req.user.email
-    const date = new Date();
-    const dateString = date.toLocaleDateString();
-    const timeString = date.toLocaleTimeString();
-
-    //auto-generated ID
-    const startingID = 1001
-    Notes.countDocuments({}).then((count) => {
+        // Auto-generated ID
+        const startingID = 1001;
+        const count = await Notes.countDocuments({});
         const newID = startingID + count + 1;
+
         const newNote = new Notes({
-            noteID : newID,
+            noteID: newID,
             title,
             description,
             email,
-            dateString, 
+            dateString,
             timeString
-        })
-        newNote.save().then((result) => {
-            res.status(200).json({
-                message: "New Note Created successful",
-                note: result
-            })
-        }).catch((err) => {
-            res.status(500).json({
-                message: "Fail to create note",
-                error: err
-            })
-        })
-    }).catch((error) => {
-        res.status(500).json({
-            message: "Something went wrong",
-            error: error
-        })
-    })
+        });
 
+        const result = await newNote.save();
+        
+        res.status(201).json({
+            message: "New Note Created successfully",
+            note: result
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: "Failed to create note",
+            error: err.message
+        });
+    }
 }
 
-//get all notes
-export function getNotes(req,res){
-    Notes.find().then((result) => {
+// Get all notes
+export async function getNotes(req, res) {
+    try {
+        const result = await Notes.find();
         res.status(200).json({
             message: "Notes Found",
             notes: result
-        })
-    }).catch((err) => {
+        });
+    } catch (err) {
         res.status(500).json({
-            message: "Fail to found notes",
-            error: err
-        })
-    })
-}
-
-//get notes by email
-export function getNotesByEmail(req,res){
-    const email = req.params.email
-    Notes.find({email: email}).then((result) => {
-        if(result == null){
-            res.status(404).json({
-                message: "Notes not found"
-            })
-        } else{
-            res.status(200).json({
-                message: "Notes Found",
-                notes: result
-            })
-        }
-    }).catch((err) => {
-        res.status(500).json({
+            message: "Failed to find notes",
             error: err.message
-        })
-    })
+        });
+    }
 }
 
-//get notes by noteID
-export function getNotesByNoteID(req,res){
-    const noteID = req.params.noteID
-
-    Notes.findOne({noteID: noteID}).then((result) => {
-        if(!result){
-            res.status(404).json({
+// Get notes by email
+export async function getNotesByEmail(req, res) {
+    try {
+        const email = req.params.email;
+        const result = await Notes.find({ email });
+        
+        if (result.length === 0) {
+            return res.status(404).json({
                 message: "Notes not found"
-            })
-        } else{
-            res.status(200).json({
-                message: "Notes Found",
-                notes: result
-            })
+            });
         }
-    }).catch((err) => {
-        res.status(500).json({
-            error: err.message
-        })
-    })
-}
-
-//Update notes
-export function updateNotes(req,res){
-    const noteID = req.params.noteID
-    const updateInfo = req.body
-
-    Notes.updateOne({noteID : noteID}, {$set: updateInfo}).then((result) => {
+        
         res.status(200).json({
-            message: "Note Update Successfully",
+            message: "Notes Found",
             notes: result
-        })
-    }).catch((err) => {
+        });
+    } catch (err) {
         res.status(500).json({
+            message: "Failed to find notes",
             error: err.message
-        })
-    })
+        });
+    }
 }
 
-//delete note
-export function deleteNotes(req,res){
-    const noteID = req.params.noteID
-    Notes.deleteOne({noteID : noteID}).then(() => {
+// Get notes by noteID
+export async function getNotesByNoteID(req, res) {
+    try {
+        const noteID = req.params.noteID;
+        const result = await Notes.findOne({ noteID });
+        
+        if (!result) {
+            return res.status(404).json({
+                message: "Note not found"
+            });
+        }
+        
+        res.status(200).json({
+            message: "Note Found",
+            note: result
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: "Failed to find note",
+            error: err.message
+        });
+    }
+}
+
+// Update notes
+export async function updateNotes(req, res) {
+    try {
+        const noteID = req.params.noteID;
+        const updateInfo = req.body;
+        
+        const result = await Notes.updateOne({ noteID }, { $set: updateInfo });
+        
+        if (result.matchedCount === 0) {
+            return res.status(404).json({
+                message: "Note not found"
+            });
+        }
+        
+        res.status(200).json({
+            message: "Note Updated Successfully",
+            modifiedCount: result.modifiedCount
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: "Failed to update note",
+            error: err.message
+        });
+    }
+}
+
+// Delete note
+export async function deleteNotes(req, res) {
+    try {
+        const noteID = req.params.noteID;
+        const result = await Notes.deleteOne({ noteID });
+        
+        if (result.deletedCount === 0) {
+            return res.status(404).json({
+                message: "Note not found"
+            });
+        }
+        
         res.status(200).json({
             message: "Note deleted successfully"
-        })
-    }).catch((err) => {
+        });
+    } catch (err) {
         res.status(500).json({
+            message: "Failed to delete note",
             error: err.message
-        })
-    })
+        });
+    }
 }

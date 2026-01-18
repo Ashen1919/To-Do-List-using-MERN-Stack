@@ -1,6 +1,6 @@
 import express from 'express';
 import { createNote, deleteNotes, getNotes, getNotesByEmail, getNotesByNoteID, updateNotes } from '../controllers/noteController.js';
-import { authenticateToken } from '../index.js';
+import { authenticateToken } from '../middlewares/auth.js';
 
 const noteRouter = express.Router();
 

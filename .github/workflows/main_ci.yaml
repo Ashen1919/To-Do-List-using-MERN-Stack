@@ -3,13 +3,17 @@ name: node workflow
 on: 
     push:
         branches:
+            - main
             - dev
+            - 'features/**'
+            - 'bugfix/**'
     pull_request:
         branches:
             - main
+            - dev
 
 jobs:
-    build:
+    build-and-test:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -21,12 +25,20 @@ jobs:
                   node-version: 24
 
             - name: Install dependencies
-              run: npm install
+              run: npm ci
 
             - name: Run lint test
               run: npm run lint
 
             - name: Test the app
               run: npm test
+
+            - name: Run the coverage test
+              run: npm test:coverage
+
+            - name: Upload coverage reports to Codecov
+              uses: codecov/codecov-action@v5
+              with:
+                token: ${{ secrets.CODECOV_TOKEN }}
 
     

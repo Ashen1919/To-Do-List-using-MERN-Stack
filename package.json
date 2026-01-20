@@ -4,6 +4,11 @@
   "main": "index.js",
   "scripts": {
     "test": "node --test",
+    "test:unit": "jest testPathPattern=unit",
+    "test:integration": "jest --testPathPattern=integration",
+    "test:smoke": "jest --testPathPattern=smoke",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "cypress run",
     "start": "nodemon index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
@@ -15,7 +20,7 @@
   "description": "",
   "dependencies": {
     "bcrypt": "6.0.0",
-    "body-parser": "2.2.0",
+    "body-parser": "2.2.2",
     "cors": "2.8.5",
     "dotenv": "16.5.0",
     "express": "5.1.0",
@@ -25,7 +30,9 @@
   },
   "devDependencies": {
     "@eslint/js": "9.39.2",
+    "cypress": "15.9.0",
     "eslint": "9.39.2",
-    "globals": "17.0.0"
+    "globals": "17.0.0",
+    "jest": "30.2.0"
   }
 }
